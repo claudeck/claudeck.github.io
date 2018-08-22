@@ -115,7 +115,7 @@
 <meta property="og:site_name" content="Claude Jiang&#39;s Blog">
 <meta property="og:description" content="由于安全原因，公司内网经常会使用一些Proxy(例如ForcePoint)进行网络内容的过滤，没有在whitelist的https请求都会被代理拦截并被替换证书。这会导致一些开发工具下https的请求都会出现问题。 另外一些测试服务器的证书采用自签名的根证书，这些测试服务器也需要在开发环境下能够被信任访问。 为了避免开发人员由于证书问题导致的各种开发不顺畅，我们需要将这代理的CA证书和测试服务器的">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-08-22T06:59:56.727Z">
+<meta property="og:updated_time" content="2018-08-22T08:15:14.031Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="将CA证书导入各种开发环境">
 <meta name="twitter:description" content="由于安全原因，公司内网经常会使用一些Proxy(例如ForcePoint)进行网络内容的过滤，没有在whitelist的https请求都会被代理拦截并被替换证书。这会导致一些开发工具下https的请求都会出现问题。 另外一些测试服务器的证书采用自签名的根证书，这些测试服务器也需要在开发环境下能够被信任访问。 为了避免开发人员由于证书问题导致的各种开发不顺畅，我们需要将这代理的CA证书和测试服务器的">
@@ -326,7 +326,7 @@
                 
               
 
-              <time title="创建时间：2018-08-22 15:14:20 / 修改时间：14:59:56" itemprop="dateCreated datePublished" datetime="2018-08-22T15:14:20+08:00">2018-08-22</time>
+              <time title="创建时间：2018-08-22 15:14:20 / 修改时间：16:15:14" itemprop="dateCreated datePublished" datetime="2018-08-22T15:14:20+08:00">2018-08-22</time>
             
 
             
@@ -336,6 +336,24 @@
             
           </span>
 
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/技术/" itemprop="url" rel="index"><span itemprop="name">技术</span></a></span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -369,8 +387,10 @@
 <p>为了避免开发人员由于证书问题导致的各种开发不顺畅，我们需要将这代理的CA证书和测试服务器的CA两个根证书加到各种开发工具中去。</p>
 <h2 id="Babun-Cygwin"><a href="#Babun-Cygwin" class="headerlink" title="Babun(Cygwin)"></a>Babun(Cygwin)</h2><p>将两个证书拷贝到babun的/etc/pki/ca-trust/source/anchors/目录下去。<br>然后运行<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">update-ca-trust</span><br></pre></td></tr></table></figure></p>
 <p>执行完毕以后，可以通过curl测试一下https的网站或者测试服务器，都可以不用加-k参数了。</p>
-<h2 id="JDK"><a href="#JDK" class="headerlink" title="JDK"></a>JDK</h2><p>JDK的信任证书库在$JAVA_HOME\jre\lib\security\cacerts里面，默认密码为changeit。<br>可以通过<a href="http://portecle.sourceforge.net/" target="_blank" rel="noopener">Protecle</a>或者Keytools将两个证书导入到cacerts里面。</p>
-<h2 id="IDEA"><a href="#IDEA" class="headerlink" title="IDEA"></a>IDEA</h2><p>IDEA有可能采用自带的JRE运行，而非系统安装的JDK。<br>信任证书库在$IDEA_INSTALL_PATH\jre64\lib\security。可以通过<a href="http://portecle.sourceforge.net/" target="_blank" rel="noopener">Protecle</a>或者Keytools将两个证书导入到cacerts里面。</p>
+<h2 id="JDK"><a href="#JDK" class="headerlink" title="JDK"></a>JDK</h2><p>JDK的信任证书库在$JAVA_HOME\jre\lib\security\cacerts里面，默认密码为changeit。</p>
+<p>可以通过<a href="http://portecle.sourceforge.net/" target="_blank" rel="noopener">Protecle</a>或者Keytools将两个证书导入到cacerts里面。</p>
+<h2 id="IDEA"><a href="#IDEA" class="headerlink" title="IDEA"></a>IDEA</h2><p>IDEA有可能采用自带的JRE运行，而非系统安装的JDK。信任证书库在$IDEA_INSTALL_PATH\jre64\lib\security。</p>
+<p>可以通过<a href="http://portecle.sourceforge.net/" target="_blank" rel="noopener">Protecle</a>或者Keytools将两个证书导入到cacerts里面。</p>
 <h2 id="Node-js"><a href="#Node-js" class="headerlink" title="Node.js"></a>Node.js</h2><p>Node.js默认的证书列表是编译到二进制执行文件里面，不过可以通过设置环境变量来添加新认证书。<br><a href="https://nodejs.org/api/cli.html#cli_node_extra_ca_certs_file" target="_blank" rel="noopener">NODE_EXTRA_CA_CERTS=file</a>。</p>
 <p>或者直接通过NODE_TLS_REJECT_UNAUTHORIZED忽略掉SSL证书的校验。</p>
 <h3 id="iPhone-iPad"><a href="#iPhone-iPad" class="headerlink" title="iPhone/iPad"></a>iPhone/iPad</h3><p>IOS只能通过自带的邮件程序附件程序导入ca.crt。可以发送邮件给iphone用户，然后在iphone中打开邮件附件，按照提示完成安装。</p>
@@ -470,6 +490,19 @@
                 </div>
               
 
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                    
+                      
+                    
+                    <span class="site-state-item-count">1</span>
+                    <span class="site-state-item-name">分类</span>
+                  
+                </div>
               
 
               
