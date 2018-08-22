@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>Claude Jiang&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="Claude Jiang&#39;s Blog">
+<meta property="og:url" content="http://yoursite.com/index.html">
+<meta property="og:site_name" content="Claude Jiang&#39;s Blog">
+<meta property="og:locale" content="zh">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Claude Jiang&#39;s Blog">
+  
+    <link rel="alternate" href="/atom.xml" title="Claude Jiang&#39;s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Claude Jiang&#39;s Blog</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">tech, learn, read</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main">
+  
+    <article id="post-import-ca-certs-to-dev-env" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/08/22/import-ca-certs-to-dev-env/" class="article-date">
+  <time datetime="2018-08-22T07:14:20.000Z" itemprop="datePublished">2018-08-22</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/08/22/import-ca-certs-to-dev-env/">将CA证书导入各种开发环境</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>由于安全原因，公司内网经常会使用一些Proxy(例如ForcePoint)进行网络内容的过滤，没有在whitelist的https请求都会被代理拦截并被替换证书。这会导致一些开发工具下https的请求都会出现问题。</p>
+<p>另外一些测试服务器的证书采用自签名的根证书，这些测试服务器也需要在开发环境下能够被信任访问。</p>
+<p>为了避免开发人员由于证书问题导致的各种开发不顺畅，我们需要将这代理的CA证书和测试服务器的CA两个根证书加到各种开发工具中去。</p>
+<h2 id="Babun-Cygwin"><a href="#Babun-Cygwin" class="headerlink" title="Babun(Cygwin)"></a>Babun(Cygwin)</h2><p>将两个证书拷贝到babun的/etc/pki/ca-trust/source/anchors/目录下去。<br>然后运行<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">update-ca-trust</span><br></pre></td></tr></table></figure></p>
+<p>执行完毕以后，可以通过curl测试一下https的网站或者测试服务器，都可以不用加-k参数了。</p>
+<h2 id="JDK"><a href="#JDK" class="headerlink" title="JDK"></a>JDK</h2><p>JDK的信任证书库在$JAVA_HOME\jre\lib\security\cacerts里面，默认密码为changeit。<br>可以通过<a href="http://portecle.sourceforge.net/" target="_blank" rel="noopener">Protecle</a>或者Keytools将两个证书导入到cacerts里面。</p>
+<h2 id="IDEA"><a href="#IDEA" class="headerlink" title="IDEA"></a>IDEA</h2><p>IDEA有可能采用自带的JRE运行，而非系统安装的JDK。<br>信任证书库在$IDEA_INSTALL_PATH\jre64\lib\security。可以通过<a href="http://portecle.sourceforge.net/" target="_blank" rel="noopener">Protecle</a>或者Keytools将两个证书导入到cacerts里面。</p>
+<h2 id="Node-js"><a href="#Node-js" class="headerlink" title="Node.js"></a>Node.js</h2><p>Node.js默认的证书列表是编译到二进制执行文件里面，不过可以通过设置环境变量来添加新认证书。<br><a href="https://nodejs.org/api/cli.html#cli_node_extra_ca_certs_file" target="_blank" rel="noopener">NODE_EXTRA_CA_CERTS=file</a>。</p>
+<p>或者直接通过NODE_TLS_REJECT_UNAUTHORIZED忽略掉SSL证书的校验。</p>
+<h3 id="iPhone-iPad"><a href="#iPhone-iPad" class="headerlink" title="iPhone/iPad"></a>iPhone/iPad</h3><p>IOS只能通过自带的邮件程序附件程序导入ca.crt。可以发送邮件给iphone用户，然后在iphone中打开邮件附件，按照提示完成安装。</p>
+<h3 id="Andoird"><a href="#Andoird" class="headerlink" title="Andoird"></a>Andoird</h3><p>通过各种手段将ca.crt拷贝或者传输到android设备。然后进入设置-&gt;系统安全-&gt;加密与凭证里面选择从存储设备安装。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/08/22/import-ca-certs-to-dev-env/" data-id="cjl4rvfhc0001esifofkastz4" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/08/22/import-ca-certs-to-dev-env/">将CA证书导入各种开发环境</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 Claude Jiang<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>
