@@ -1,6 +1,8 @@
 ---
 title: 将CA证书导入各种开发环境
 date: 2018-08-22 15:14:20
+categories:
+- 技术
 tags:
 ---
 由于安全原因，公司内网经常会使用一些Proxy(例如ForcePoint)进行网络内容的过滤，没有在whitelist的https请求都会被代理拦截并被替换证书。这会导致一些开发工具下https的请求都会出现问题。
@@ -21,11 +23,13 @@ update-ca-trust
 ## JDK
 
 JDK的信任证书库在$JAVA_HOME\jre\lib\security\cacerts里面，默认密码为changeit。
+
 可以通过[Protecle](http://portecle.sourceforge.net/)或者Keytools将两个证书导入到cacerts里面。
 
 ## IDEA
-IDEA有可能采用自带的JRE运行，而非系统安装的JDK。
-信任证书库在$IDEA_INSTALL_PATH\jre64\lib\security。可以通过[Protecle](http://portecle.sourceforge.net/)或者Keytools将两个证书导入到cacerts里面。
+IDEA有可能采用自带的JRE运行，而非系统安装的JDK。信任证书库在$IDEA_INSTALL_PATH\jre64\lib\security。
+
+可以通过[Protecle](http://portecle.sourceforge.net/)或者Keytools将两个证书导入到cacerts里面。
 
 ## Node.js
 Node.js默认的证书列表是编译到二进制执行文件里面，不过可以通过设置环境变量来添加新认证书。
