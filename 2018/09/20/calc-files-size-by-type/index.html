@@ -108,17 +108,17 @@
 
 
 
-  <meta name="description" content="假设有一个文件夹C:\content，里面有10W个文件，包含几万个PDF文件，还有几万个XML文件，如何统计它们占用的磁盘空间呢？ Windows下可以用PowerShell来统计，命令如下： 1&quot;&amp;#123;0:N2&amp;#125;MB&quot; -f ((gci -path C:\content -recurse -include *.pdf | Measure-Object length -Sum).">
+  <meta name="description" content="假设有一个文件夹C:\content，里面有10W个文件，包含几万个PDF文件，还有几万个XML文件，如何统计它们占用的磁盘空间呢？ Windows下可以用PowerShell来统计，命令如下: 1&quot;&amp;#123;0:N2&amp;#125;MB&quot; -f ((gci -path C:\content -recurse -include *.pdf | Measure-Object length -Sum).">
 <meta property="og:type" content="article">
 <meta property="og:title" content="计算同一类型文件的占用多少空间">
 <meta property="og:url" content="http://yoursite.com/2018/09/20/calc-files-size-by-type/index.html">
 <meta property="og:site_name" content="Claude Jiang&#39;s Blog">
-<meta property="og:description" content="假设有一个文件夹C:\content，里面有10W个文件，包含几万个PDF文件，还有几万个XML文件，如何统计它们占用的磁盘空间呢？ Windows下可以用PowerShell来统计，命令如下： 1&quot;&amp;#123;0:N2&amp;#125;MB&quot; -f ((gci -path C:\content -recurse -include *.pdf | Measure-Object length -Sum).">
+<meta property="og:description" content="假设有一个文件夹C:\content，里面有10W个文件，包含几万个PDF文件，还有几万个XML文件，如何统计它们占用的磁盘空间呢？ Windows下可以用PowerShell来统计，命令如下: 1&quot;&amp;#123;0:N2&amp;#125;MB&quot; -f ((gci -path C:\content -recurse -include *.pdf | Measure-Object length -Sum).">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-09-20T07:50:43.067Z">
+<meta property="og:updated_time" content="2018-09-20T08:18:34.259Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="计算同一类型文件的占用多少空间">
-<meta name="twitter:description" content="假设有一个文件夹C:\content，里面有10W个文件，包含几万个PDF文件，还有几万个XML文件，如何统计它们占用的磁盘空间呢？ Windows下可以用PowerShell来统计，命令如下： 1&quot;&amp;#123;0:N2&amp;#125;MB&quot; -f ((gci -path C:\content -recurse -include *.pdf | Measure-Object length -Sum).">
+<meta name="twitter:description" content="假设有一个文件夹C:\content，里面有10W个文件，包含几万个PDF文件，还有几万个XML文件，如何统计它们占用的磁盘空间呢？ Windows下可以用PowerShell来统计，命令如下: 1&quot;&amp;#123;0:N2&amp;#125;MB&quot; -f ((gci -path C:\content -recurse -include *.pdf | Measure-Object length -Sum).">
 
 
 
@@ -326,7 +326,7 @@
                 
               
 
-              <time title="创建时间：2018-09-20 15:35:24 / 修改时间：15:50:43" itemprop="dateCreated datePublished" datetime="2018-09-20T15:35:24+08:00">2018-09-20</time>
+              <time title="创建时间：2018-09-20 15:35:24 / 修改时间：16:18:34" itemprop="dateCreated datePublished" datetime="2018-09-20T15:35:24+08:00">2018-09-20</time>
             
 
             
@@ -373,9 +373,9 @@
 
       
         <p>假设有一个文件夹C:\content，里面有10W个文件，包含几万个PDF文件，还有几万个XML文件，如何统计它们占用的磁盘空间呢？</p>
-<p>Windows下可以用PowerShell来统计，命令如下：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">"&#123;0:N2&#125;MB" -f ((gci -path C:\content -recurse -include *.pdf | Measure-Object length -Sum).Sum/ 1mb)</span><br></pre></td></tr></table></figure>
-<p>Linux下可以用du来统计。</p>
+<p>Windows下可以用PowerShell来统计，命令如下:</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">"&#123;0:N2&#125;MB"</span> -f ((gci -path C:\content -recurse -include *.pdf | <span class="built_in">Measure-Object</span> length -Sum).Sum/ <span class="number">1</span>mb)</span><br></pre></td></tr></table></figure>
+<p>Linux下可以用du来统计:</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">du -ch -- **/*.pdf | tail -n 1</span><br></pre></td></tr></table></figure>
       
     </div>
